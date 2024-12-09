@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Change password</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            box-sizing: border-box;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .checkbox-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .submit-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .submit-button:hover {
+            background-color: #45a049;
+        }
+        .input-container {
+            position: relative; /* Thêm vị trí tương đối */
+        }
+        .toggle-password {
+            cursor: pointer;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            user-select: none; /* Ngăn chặn chọn văn bản khi nhấn */
+        }
+        .message {
+            color: red;
+            text-align: center;
+        }
+        .back-button {
+            background-color: #007BFF; /* Màu nền */
+            color: white; /* Màu chữ */
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 10px; /* Khoảng cách với nút submit */
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #0056b3; /* Màu nền khi hover */
+        }                
+        
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <form method="POST" th:action="@{/doChangePass}">
+            <h2>Username</h2>
+            <input type="text" name="username" placeholder="Enter username" required="required"> 
+            <h2>Old password</h2>
+            <div class="input-container">
+                <input type="password" name="password" id="password" placeholder="Enter password" required="required"> 
+                <span class="toggle-password" onclick="togglePassword('password', this)">🙈</span>
+            </div>
+            <h2>New password</h2>
+            <div class="input-container">
+                <input type="password" name="newPassword" id="newPassword" placeholder="Enter password" required="required"> 
+                <span class="toggle-password" onclick="togglePassword('newPassword', this)">🙈</span>
+            </div>            
+            <button type="submit" class="submit-button">Submit</button>
+        </form>
+         <button class="back-button" onclick="location.href='/login'">Back to Login</button>        
+        <p class="message" th:text="${mes}"></p>
+    </div>
+    <script>
+        function togglePassword(inputId, toggleButton) {
+            const passwordInput = document.getElementById(inputId);
+            const isPasswordVisible = passwordInput.type === 'password';
+            passwordInput.type = isPasswordVisible ? 'text' : 'password';
+            toggleButton.textContent = isPasswordVisible ? '👁️' : '🙈'; // Đổi icon
+        }
+    </script>
+</body>
+</html>
