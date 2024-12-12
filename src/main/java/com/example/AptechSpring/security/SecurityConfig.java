@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 import com.example.AptechSpring.service.iml.UserDetailsServiceImpl;
 
@@ -39,7 +41,8 @@ public class SecurityConfig {
 				)
 				.logout(logout -> logout
 						.logoutUrl("/logout") // Đường dẫn logout
-						// .logoutSuccessUrl("/home/home1")
+						.invalidateHttpSession(true) // Xóa session
+						.clearAuthentication(true) // Xóa authen
 						.permitAll());
 
 		// Hoàn tất cấu hình bảo mật và trả về SecurityFilterChain
@@ -54,5 +57,12 @@ public class SecurityConfig {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	// Xử lý lỗi đăng nhập
+	@Bean
+	public AuthenticationFailureHandler authenticationFailureHandler() {
+		// Thêm param `error=true` vào url khi đăng nhập thất bại
+		return new SimpleUrlAuthenticationFailureHandler("/login?error=true");
 	}
 }

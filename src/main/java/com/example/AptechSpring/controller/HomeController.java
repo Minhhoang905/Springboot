@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.core.Authentication;
 
 import com.example.AptechSpring.controller.DTO.DuLichHomepageDTO;
 import com.example.AptechSpring.controller.DTO.DuLichInsertDTO;
@@ -28,9 +29,19 @@ public class HomeController {
 	@Autowired
 	private DuLichService duLichService;
 
-	// Tạo method xử lý yêu cầu GET cho đường dẫn "/home1"
+	// Tạo method xử lý yêu cầu GET cho đường dẫn "/search"
 	@RequestMapping(path = "/search", method = RequestMethod.GET)
-	public String printString(Model model, @ModelAttribute("duLichObject") DuLich duLich) {
+	public String printString(Model model, @ModelAttribute("duLichObject") DuLich duLich,
+			Authentication authentication) {
+		// Lấy tên người dùng đã đăng nhập từ Authentication
+		if (authentication != null) {
+			// Lấy tên người dùng và truyền vào model
+			model.addAttribute("username", authentication.getName());
+		} else {
+			// Nếu không có thông tin đăng nhập, có thể trả về thông báo hoặc redirect
+			model.addAttribute("username", "Nhà lữ hành");
+		}
+
 		// Tạo đối tượng ở lớp DuLichHomepageDTO
 		// Gọi phương thức `getDuLichHomepage` ở service để lấy dữ liệu cần thiết cho
 		// @controller
@@ -68,9 +79,18 @@ public class HomeController {
 		return "home";
 	}
 
-	// Tạo method search để xử lý yêu cầu POST cho đường dẫn "/home1"
+	// Tạo method search để xử lý yêu cầu POST cho đường dẫn "/search"
 	@RequestMapping(path = "/doSearch", method = RequestMethod.POST)
-	public String search(Model model, @ModelAttribute("duLichObject") DuLich duLich) {
+	public String search(Model model, @ModelAttribute("duLichObject") DuLich duLich, Authentication authentication) {
+		// Lấy tên người dùng đã đăng nhập từ Authentication
+		if (authentication != null) {
+			// Lấy tên người dùng và truyền vào model
+			model.addAttribute("username", authentication.getName());
+		} else {
+			// Nếu không có thông tin đăng nhập, có thể trả về thông báo hoặc redirect
+			model.addAttribute("username", "Nhà lữ hành");
+		}
+
 		// Tạo đối tượng ở lớp DuLichHomepageDTO
 		// Gọi phương thức `duLichHomePageWithSearch` service để lấy dữ liệu cần thiết
 		// cho @controller
