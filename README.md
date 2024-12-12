@@ -1,4 +1,4 @@
-// Tạo database (chưa có dữ liệu)
+# Tạo database (chỉ tạo table, chưa đưa dữ liệu)
 // Tỉnh
 ```
 CREATE TABLE TINH (
