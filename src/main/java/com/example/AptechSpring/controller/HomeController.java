@@ -21,10 +21,10 @@ import com.example.AptechSpring.service.DuLichService;
 
 //Đánh dấu lớp này là một Controller của Spring
 @Controller
-//Định nghĩa đường dẫn cơ sở cho tất cả các yêu cầu trong lớp này
+// Định nghĩa đường dẫn cơ sở cho tất cả các yêu cầu trong lớp này
 @RequestMapping("/home")
 public class HomeController {
-	//Inject (tiêm) service để gọi các logic vào controller 
+	// Inject (tiêm) service để gọi các logic vào controller
 	@Autowired
 	private DuLichService duLichService;
 
@@ -32,10 +32,16 @@ public class HomeController {
 	@RequestMapping(path = "/search", method = RequestMethod.GET)
 	public String printString(Model model, @ModelAttribute("duLichObject") DuLich duLich) {
 		// Tạo đối tượng ở lớp DuLichHomepageDTO
-		// Gọi phương thức `getDuLichHomepage` ở service để lấy dữ liệu cần thiết cho @controller
+		// Gọi phương thức `getDuLichHomepage` ở service để lấy dữ liệu cần thiết cho
+		// @controller
 		DuLichHomepageDTO duLichHomepage = duLichService.getDuLichHomepage(duLich);
 		// Thêm thuộc tính "message" vào model với thông điệp
 		model.addAttribute("mes", "Hello to spring MVC");
+
+		// Gọi phương thức xác định vai trò của user từ @Service
+		String role = duLichService.getCurrentUserRole();
+		// Thêm thông tin về role vào form ở html
+		model.addAttribute("role", role);
 
 		// Thêm list các đối tượng để hiển thị ở dropdown
 		// Danh sách các tỉnh lấy từ DTO
@@ -55,7 +61,8 @@ public class HomeController {
 		// Đối tượng rỗng để binding với th:object ở form
 		model.addAttribute("duLichObject", new DuLich());
 
-		// Thêm danh sách kết quả tìm kiếm địa điểm du lịch ở `DuLichHomepageDTO` vào model
+		// Thêm danh sách kết quả tìm kiếm địa điểm du lịch ở `DuLichHomepageDTO` vào
+		// model
 		model.addAttribute("duLichResults", duLichHomepage.getDuLichResults());
 		// Trả về tên file template Thymeleaf (home.html)
 		return "home";
@@ -65,12 +72,18 @@ public class HomeController {
 	@RequestMapping(path = "/doSearch", method = RequestMethod.POST)
 	public String search(Model model, @ModelAttribute("duLichObject") DuLich duLich) {
 		// Tạo đối tượng ở lớp DuLichHomepageDTO
-		// Gọi phương thức `duLichHomePageWithSearch` service để lấy dữ liệu cần thiết cho @controller		
+		// Gọi phương thức `duLichHomePageWithSearch` service để lấy dữ liệu cần thiết
+		// cho @controller
 		DuLichHomepageDTO duLichHomepageDTO = duLichService.duLichHomePageWithSearch(duLich);
-		
+
+		// Gọi phương thức xác định vai trò của user từ @Service
+		String role = duLichService.getCurrentUserRole();
+		// Thêm thông tin về role vào form ở html
+		model.addAttribute("role", role);
+
 		// Thêm thuộc tính "message" vào model với thông điệp
 		model.addAttribute("mes", "Hello to spring MVC");
-		
+
 		// Thêm list các đối tượng để hiển thị ở dropdown
 		// Danh sách các tỉnh lấy từ DuLichHomepageDTO
 		model.addAttribute("tinhList", duLichHomepageDTO.getTinhList());
@@ -78,8 +91,8 @@ public class HomeController {
 		model.addAttribute("quanList", duLichHomepageDTO.getQuanList());
 		// Danh sách các xã lấy từ DTO
 		model.addAttribute("xaList", duLichHomepageDTO.getXaList());
-		
-		//Thêm các đối tượng rỗng để binding với Thymeleaf
+
+		// Thêm các đối tượng rỗng để binding với Thymeleaf
 		// Đối tượng `Tinh` rỗng để binding khi thêm mới hoặc chỉnh sửa
 		model.addAttribute("tinh", new Tinh());
 		// Đối tượng `Quan` rỗng để binding khi thêm mới hoặc chỉnh sửa
@@ -88,11 +101,12 @@ public class HomeController {
 		model.addAttribute("xa", new Xa());
 		// Đối tượng rỗng để binding với th:object ở form
 		model.addAttribute("duLichObject", new DuLich());
-		
-		// Thêm danh sách kết quả tìm kiếm địa điểm du lịch ở `DuLichHomepageDTO` vào model
+
+		// Thêm danh sách kết quả tìm kiếm địa điểm du lịch ở `DuLichHomepageDTO` vào
+		// model
 		model.addAttribute("duLichResults", duLichHomepageDTO.getDuLichResults());
-		
-//        model.addAttribute("dulich111", dulich);
+
+		// model.addAttribute("dulich111", dulich);
 
 		// <td><input type="text" class="form-control" name="id" th:value="${dulich.id
 		// != null} ? ${dulich.id} : ''"></td>
@@ -105,11 +119,17 @@ public class HomeController {
 	@RequestMapping(path = "/insert", method = RequestMethod.GET)
 	public String loadingInsertInfo(Model model) {
 		// Tạo đối tượng ở lớp DuLichHomepageDTO
-		// Gọi phương thức `getDuLichDropDown` service để lấy dữ liệu cần thiết cho @controller		
+		// Gọi phương thức `getDuLichDropDown` service để lấy dữ liệu cần thiết cho
+		// @controller
 		DuLichHomepageDTO DuLichDropdown = duLichService.getDuLichDropDown();
 		// Thêm thuộc tính "message" vào model với thông điệp
 		model.addAttribute("mes", "Hello to spring MVC");
-		
+
+		// Gọi phương thức xác định vai trò của user từ @Service
+		String role = duLichService.getCurrentUserRole();
+		// Thêm thông tin về role vào form ở html
+		model.addAttribute("role", role);
+
 		// Thêm list các đối tượng để hiển thị ở dropdown
 		// Danh sách các tỉnh lấy từ DuLichHomepageDTO
 		model.addAttribute("tinhList", DuLichDropdown.getTinhList());
@@ -117,8 +137,8 @@ public class HomeController {
 		model.addAttribute("quanList", DuLichDropdown.getQuanList());
 		// Danh sách các xã lấy từ DTO
 		model.addAttribute("xaList", DuLichDropdown.getXaList());
-		
-		//Thêm các đối tượng rỗng để binding với Thymeleaf
+
+		// Thêm các đối tượng rỗng để binding với Thymeleaf
 		// Đối tượng `Tinh` rỗng để binding khi thêm mới hoặc chỉnh sửa
 		model.addAttribute("tinh", new Tinh());
 		// Đối tượng `Quan` rỗng để binding khi thêm mới hoặc chỉnh sửa
@@ -133,11 +153,12 @@ public class HomeController {
 	@RequestMapping(path = "/doInsert", method = RequestMethod.POST)
 	public String insertInfo(@ModelAttribute DuLichInsertDTO duLichInsertDTO, ModelMap model) {
 		// Tạo đối tượng ở lớp DuLichHomepageDTO
-		// Gọi phương thức `getDuLichDropDown` service để lấy dữ liệu cần thiết cho @controller		
+		// Gọi phương thức `getDuLichDropDown` service để lấy dữ liệu cần thiết cho
+		// @controller
 		DuLichHomepageDTO DuLichDropdown = duLichService.getDuLichDropDown();
 		// Thêm thuộc tính "message" vào model với thông điệp
 		model.addAttribute("mes", "Hello to spring MVC");
-		
+
 		// Thêm list các đối tượng để hiển thị ở dropdown
 		// Danh sách các tỉnh lấy từ DuLichHomepageDTO
 		model.addAttribute("tinhList", DuLichDropdown.getTinhList());
@@ -145,15 +166,15 @@ public class HomeController {
 		model.addAttribute("quanList", DuLichDropdown.getQuanList());
 		// Danh sách các xã lấy từ DTO
 		model.addAttribute("xaList", DuLichDropdown.getXaList());
-		
-		//Thêm các đối tượng rỗng để binding với Thymeleaf
+
+		// Thêm các đối tượng rỗng để binding với Thymeleaf
 		// Đối tượng `Tinh` rỗng để binding khi thêm mới hoặc chỉnh sửa
 		model.addAttribute("tinh", new Tinh());
 		// Đối tượng `Quan` rỗng để binding khi thêm mới hoặc chỉnh sửa
 		model.addAttribute("quan", new Quan());
 		// Đối tượng `Xa` rỗng để binding khi thêm mới hoặc chỉnh sửa
 		model.addAttribute("xa", new Xa());
-		
+
 		// Tạo biến, và lấu thông lấy phương thức từ interface DuLichInsertDTO
 		// Tên địa điểm
 		String diaDiemDuLich = duLichInsertDTO.getDiaDiem();
@@ -169,7 +190,7 @@ public class HomeController {
 		String moTa = duLichInsertDTO.getMoTa();
 		// Đưa các thông tin vào database bằng method ở service
 		duLichService.insertInfo(diaDiemDuLich, idTinh, idQuan, idXa, diaChiCuThe, moTa);
-		
+
 		// Trả về html "home"
 		return "redirect:/home/search";
 	}
@@ -178,8 +199,14 @@ public class HomeController {
 	@RequestMapping(path = "/update", method = RequestMethod.GET)
 	public String loadingUpdateInfo(Model model, @RequestParam("id") Long id) {
 		// Tạo đối tượng ở lớp DuLichHomepageDTO
-		// Gọi phương thức `getDuLichDropDown` service để lấy dữ liệu cần thiết cho @controller		
+		// Gọi phương thức `getDuLichDropDown` service để lấy dữ liệu cần thiết cho
+		// @controller
 		DuLichHomepageDTO DuLichDropdown = duLichService.getDuLichDropDown();
+
+		// Gọi phương thức xác định vai trò của user từ @Service
+		String role = duLichService.getCurrentUserRole();
+		// Thêm thông tin về role vào form ở html
+		model.addAttribute("role", role);
 
 		// Thêm list các đối tượng để hiển thị ở dropdown
 		// Danh sách các tỉnh lấy từ DuLichHomepageDTO
@@ -188,15 +215,15 @@ public class HomeController {
 		model.addAttribute("quanList", DuLichDropdown.getQuanList());
 		// Danh sách các xã lấy từ DTO
 		model.addAttribute("xaList", DuLichDropdown.getXaList());
-		
-		//Thêm các đối tượng rỗng để binding với Thymeleaf
+
+		// Thêm các đối tượng rỗng để binding với Thymeleaf
 		// Đối tượng `Tinh` rỗng để binding khi thêm mới hoặc chỉnh sửa
 		model.addAttribute("tinh", new Tinh());
 		// Đối tượng `Quan` rỗng để binding khi thêm mới hoặc chỉnh sửa
 		model.addAttribute("quan", new Quan());
 		// Đối tượng `Xa` rỗng để binding khi thêm mới hoặc chỉnh sửa
 		model.addAttribute("xa", new Xa());
-		 // Lấy đối tượng DuLich để cập nhật (gọi từ service)
+		// Lấy đối tượng DuLich để cập nhật (gọi từ service)
 		Optional<DuLich> duLichUpdate = duLichService.findByid(id);
 		model.addAttribute("duLichUpdate", duLichUpdate);
 
@@ -208,8 +235,14 @@ public class HomeController {
 	@RequestMapping(path = "/doUpdate", method = RequestMethod.POST)
 	public String updateInfo(@ModelAttribute("duLichUpdate") DuLichInsertDTO duLichInsertDTO, ModelMap model) {
 		// Tạo đối tượng ở lớp DuLichHomepageDTO
-		// Gọi phương thức `getDuLichDropDown` service để lấy dữ liệu cần thiết cho @controller		
+		// Gọi phương thức `getDuLichDropDown` service để lấy dữ liệu cần thiết cho
+		// @controller
 		DuLichHomepageDTO DuLichDropdown = duLichService.getDuLichDropDown();
+
+		// Gọi phương thức xác định vai trò của user từ @Service
+		String role = duLichService.getCurrentUserRole();
+		// Thêm thông tin về role vào form ở html
+		model.addAttribute("role", role);
 
 		// Thêm list các đối tượng để hiển thị ở dropdown
 		// Danh sách các tỉnh lấy từ DuLichHomepageDTO
@@ -218,8 +251,8 @@ public class HomeController {
 		model.addAttribute("quanList", DuLichDropdown.getQuanList());
 		// Danh sách các xã lấy từ DTO
 		model.addAttribute("xaList", DuLichDropdown.getXaList());
-		
-		//Thêm các đối tượng rỗng để binding với Thymeleaf
+
+		// Thêm các đối tượng rỗng để binding với Thymeleaf
 		// Đối tượng `Tinh` rỗng để binding khi thêm mới hoặc chỉnh sửa
 		model.addAttribute("tinh", new Tinh());
 		// Đối tượng `Quan` rỗng để binding khi thêm mới hoặc chỉnh sửa
@@ -250,9 +283,14 @@ public class HomeController {
 	// Tạo method xử lý yêu cầu GET cho đường dẫn "/doDelete"
 	@RequestMapping(path = "/doDelete", method = RequestMethod.GET)
 	public String deleteInfo(Model model, @RequestParam(value = "id") Long id) {
+		// Gọi phương thức xác định vai trò của user từ @Service
+		String role = duLichService.getCurrentUserRole();
+		// Thêm thông tin về role vào form ở html
+		model.addAttribute("role", role);
+
 		// Xóa thông tin cần xóa bằng method ở service
 		duLichService.deleteInfoById(id);
-		//Trả về lại html "home"
+		// Trả về lại html "home"
 		return "redirect:/home/search";
 	}
 
