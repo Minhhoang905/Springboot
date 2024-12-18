@@ -43,7 +43,8 @@ public class SecurityConfig {
 						.logoutUrl("/logout") // Đường dẫn logout
 						.invalidateHttpSession(true) // Xóa session
 						.clearAuthentication(true) // Xóa authen
-						.permitAll());
+						.permitAll())
+				.anonymous(); // Bật chế độ khách
 
 		// Hoàn tất cấu hình bảo mật và trả về SecurityFilterChain
 		return http.build();

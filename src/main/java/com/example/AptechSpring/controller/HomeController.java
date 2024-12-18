@@ -33,13 +33,19 @@ public class HomeController {
 	@RequestMapping(path = "/search", method = RequestMethod.GET)
 	public String printString(Model model, @ModelAttribute("duLichObject") DuLich duLich,
 			Authentication authentication) {
-		// Lấy tên người dùng đã đăng nhập từ Authentication
-		if (authentication != null) {
-			// Lấy tên người dùng và truyền vào model
-			model.addAttribute("username", authentication.getName());
-		} else {
-			// Nếu không có thông tin đăng nhập, có thể trả về thông báo hoặc redirect
-			model.addAttribute("username", "Nhà lữ hành");
+		// Xác định role khi đăng nhập khởi tạo
+		// Xác định role của người dùng
+		String username = "Nhà lữ hành"; // Mặc định tên gọi ban đầu theo spring boot
+		String role = "Anonymous"; // Mặc định ban đầu là Anonymous trong spring security
+
+		// Tạo điều kiện để kiểm tra xem có người dùng hiện tại đăng nhập vào không
+		if (authentication != null //// Đảm bảo đối tượng Authentication không null
+				&& authentication.isAuthenticated()) // Xác nhận rằng người dùng đã đăng nhập thành công
+		{
+			// Lấy tên người dùng đã đăng nhập từ Authentication
+			username = authentication.getName();
+			// Gọi phương thức xác định vai trò của user từ @Service
+			role = duLichService.getCurrentUserRole();
 		}
 
 		// Tạo đối tượng ở lớp DuLichHomepageDTO
@@ -49,9 +55,8 @@ public class HomeController {
 		// Thêm thuộc tính "message" vào model với thông điệp
 		model.addAttribute("mes", "Hello to spring MVC");
 
-		// Gọi phương thức xác định vai trò của user từ @Service
-		String role = duLichService.getCurrentUserRole();
-		// Thêm thông tin về role vào form ở html
+		// Gắn các thông tin vào model để hiển thị ở home.html
+		model.addAttribute("username", username);
 		model.addAttribute("role", role);
 
 		// Thêm list các đối tượng để hiển thị ở dropdown
