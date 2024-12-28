@@ -25,7 +25,10 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/home/search").permitAll() // Không đăng nhập: Chỉ được phép xem home
+				.requestMatchers("/home/search", "/api/getQuanDropdown", "/api/getXaDropdown").permitAll() // Không đăng
+																											// nhập: Chỉ
+																											// được phép
+																											// xem home
 				.requestMatchers("/doLogin", "/register", "/doRegister", "/changePass", "/doChangePass").permitAll()
 				.requestMatchers("/home/doSearch").hasAnyRole("ADMIN", "USER") // Cả user và admin thực hiện search
 				.requestMatchers("/home/insert", "/home/update", "/home/doUpdate", "/home/doDelete").hasRole("ADMIN") // admin:

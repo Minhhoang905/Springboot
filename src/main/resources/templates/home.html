@@ -171,6 +171,83 @@
             </table>
         </section>
     </div>
+    <!-- Script AJAX -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Khi người dùng thay đổi "Tỉnh"
+            $('#idTinh').change(function () {
+                // Lấy giá trị "Tỉnh" được chọn
+                var tinhId = $(this).val();
+
+                // Reset dropdown quận và huyện nếu tỉnh là null
+                if (tinhId == null || !tinhId) {
+                    // Reset dropdown quận
+                    $('#idQuan').empty().append('<option value="">Chọn quận (huyện)</option>');
+                    // Reset dropdown xã
+                    $('#idXa').empty().append('<option value="">Chọn xã (phường)</option>');
+                    // Thoát và không gọi api quận và xã nữa
+                    return;
+                };
+
+                if (tinhId) {
+                    // Hiển thị trạng thái loading trong dropdown quận
+                    $('#idQuan').empty().append('<option value="">Đang tải...</option>');
+                    // Gửi AJAX request lấy danh sách quận
+                    $.ajax({
+                        //Endpoint back-end để lấy dữ liệu quận
+                        url: '/api/getQuanDropdown',
+                        type: 'GET',
+                        data: {
+                            // Gửi id tỉnh về server
+                            idTinh: tinhId
+                        },
+                        success: function (data) {
+                            // Làm rỗng dropdown quận và xã trước khi cập nhập							
+                            $('#idQuan').empty().append('<option value="">Chọn quận (huyện)</option>');
+                            $('#idXa').empty().append('<option value="">Chọn xã (phường)</option>');
+
+                            // Thêm các tùy chọn mới vào dropdown quận
+                            if (data && data.length > 0) {
+                                data.forEach(function (quan) {
+                                    $('#idQuan').append('<option value="' + quan.idQuan + '">' + quan.tenQuan + '</option>');
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+            // Khi người dùng thay đổi quận
+            $('#idQuan').change(function () {
+                // Lấy giá trị quận được chọn
+                var quanId = $(this).val();
+
+                if (quanId) {
+                    // Hiển thị trạng thái loading trong dropdown xã
+                    $('#idXa').empty().append('<option value="">Đang tải...</option>');
+                    // Gửi ajax request để lấy danh sách xã
+                    $.ajax({
+                        url: '/api/getXaDropdown',
+                        type: 'GET',
+                        data: {
+                            // Gửi id quận về server
+                            idQuan: quanId
+                        },
+                        success: function (data) {
+                            // Làm rỗng dropdown xã trước khi cập nhập
+                            $('#idXa').empty().append('<option value="">Chọn xã (phường)</option>');
+
+                            // Thêm các tùy chọn mới vào dropdown Xã
+                            data.forEach(function (xa) {
+                                $('#idXa').append('<option value="' + xa.idXa + '">' + xa.tenXa + '</option>');
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

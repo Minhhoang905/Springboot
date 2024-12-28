@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.example.AptechSpring.controller.DTO.DuLichHomepageDTO;
 import com.example.AptechSpring.controller.DTO.DuLichResultDTO;
 import com.example.AptechSpring.entity.DuLich;
+import com.example.AptechSpring.entity.Quan;
+import com.example.AptechSpring.entity.Xa;
 import com.example.AptechSpring.repository.DuLichRepository;
 import com.example.AptechSpring.repository.QuanRepository;
 import com.example.AptechSpring.repository.TinhRepository;
@@ -30,9 +32,14 @@ public class DuLichService {
 	@Autowired
 	private XaRepository xaRepository;
 
-	// Tạo method để hiển thị toàn bộ thông tin entity của DuLich
-	public List<DuLich> getAllInfoDuLich() {
-		return duLichRepository.findAll();
+	// Lấy danh sách quận theo id Tỉnh (bằng phương thức tùy chỉnh trong repo)
+	public List<Quan> getQuanByIdTinh(Long tinhId) {
+		return quanRepository.findQuanByIdTinh(tinhId);
+	}
+
+	// Lấy danh sách xã theo id Quận (bằng phương thức tùy chỉnh trong repo)
+	public List<Xa> getXaByIdQuan(Long quanId) {
+		return xaRepository.findXaByIdQuan(quanId);
 	}
 
 	// Method hiển thị các dropdown
@@ -43,10 +50,6 @@ public class DuLichService {
 		// Lấy danh sách Tỉnh, quận, xã từ phương thức ở repository
 		// Tỉnh
 		duLichHomepageDTO.setTinhList(tinhRepository.findAll());
-		// Quận
-		duLichHomepageDTO.setQuanList(quanRepository.findAll());
-		// Xã
-		duLichHomepageDTO.setXaList(xaRepository.findAll());
 		// Trả về đối tượng của DuLichHomepageDTO
 		return duLichHomepageDTO;
 	}

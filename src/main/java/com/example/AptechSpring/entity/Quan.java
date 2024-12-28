@@ -11,45 +11,63 @@ import jakarta.validation.constraints.Null;
 @Entity
 @Table(name = "Quan", schema = "dbo")
 public class Quan {
-	//Tạo các thuộc tính = tên trường trong database
+	// Tạo các thuộc tính = tên trường trong database
 
 	// id (Tương đương với khóa chính)
-	//ID của tỉnh
+	// ID của tỉnh
 	@Id
 	@NotNull
 	@Column(name = "ID_QUAN")
 	private Long idQuan;
-	//Tên quận
+	// Tên quận
 	@Column(name = "TEN_QUAN")
 	@NotNull
 	private String tenQuan;
-	//Mô tả
+	// Mô tả
 	@Column(name = "MOTA")
 	@Null
 	private String moTa;
-	
-	//Getter và Setter
+	// Lấy id của Tỉnh từ table Tỉnh
+	// ID của tỉnh
+	@NotNull
+	@Column(name = "ID_TINH")
+	private Long idTinh;
+
+	// Getter và Setter
 	public Long getIdQuan() {
 		return idQuan;
 	}
+
 	public void setIdQuan(Long idQuan) {
 		this.idQuan = idQuan;
 	}
+
 	public String getTenQuan() {
 		return tenQuan;
 	}
+
 	public void setTenQuan(String tenQuan) {
 		this.tenQuan = tenQuan;
 	}
+
 	public String getMoTa() {
 		return moTa;
 	}
+
 	public void setMoTa(String moTa) {
 		this.moTa = moTa;
 	}
-	
+
+	public Long getIdTinh() {
+		return idTinh;
+	}
+
+	public void setIdTinh(Long idTinh) {
+		this.idTinh = idTinh;
+	}
+
 	@Override
 	public String toString() {
 		return "Quan [idQuan=" + idQuan + ", tenQuan=" + tenQuan + ", moTa=" + moTa + "]";
-	}	
+	}
 }
